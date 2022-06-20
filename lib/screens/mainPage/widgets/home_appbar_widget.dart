@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movies/constants/style_constants.dart';
 
-import '../../../custom_app_bar.dart';
+import '../../../my_wave_clipper.dart';
 
 class HomeAppbarWidget extends StatelessWidget {
-  const HomeAppbarWidget({
+  final String title;
+  const HomeAppbarWidget(
+    this.title, {
     Key? key,
   }) : super(key: key);
 
@@ -18,11 +20,11 @@ class HomeAppbarWidget extends StatelessWidget {
           color: Colors.red,
           width: MediaQuery.of(context).size.width,
           height: 160,
-          child: const Align(
+          child: Align(
               alignment: Alignment.center,
               child: Text(
-                "In Theaters",
-                style: TextStyle(
+                title,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: appbarTitleSize,
                   fontWeight: FontWeight.bold,

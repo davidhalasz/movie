@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/constants/style_constants.dart';
 
-import '../../../custom_app_bar.dart';
+import '../../../my_wave_clipper.dart';
 import '../../../models/movie.dart';
 
 class CustomAppbarWidget extends StatelessWidget {

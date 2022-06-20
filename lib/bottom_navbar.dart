@@ -10,11 +10,14 @@ class BottomNavbar extends StatelessWidget {
       showUnselectedLabels: false,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: "home",
+          icon: Icon(
+            Icons.theaters,
+            color: Colors.red,
+          ),
+          label: "Now Playing",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bus_alert),
+          icon: Icon(Icons.movie_filter),
           label: "bus",
         ),
         BottomNavigationBarItem(
