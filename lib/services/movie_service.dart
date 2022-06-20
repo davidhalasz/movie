@@ -10,7 +10,7 @@ class MovieService {
   Future<List<Movie>?> getMovies() async {
     try {
       var url = Uri.parse(
-          "https://api.themoviedb.org/3/movie/now_playing?api_key=c8c2dc4a004ab75fb04c2361ebf1faa4&language=en-US&page=1&region=hu");
+          "${ApiConstants.baseUrl}${ApiConstants.nowPlaying}${ApiConstants.apiKey}&language=en-US&page=1&region=hu");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         var decodedResponse = jsonDecode(response.body);
