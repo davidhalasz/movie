@@ -39,16 +39,19 @@ class GenresWidget extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (var name in genreNames)
-                        Text(
-                          name,
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
-                        )
-                    ],
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var name in genreNames)
+                          Text(
+                            name,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18),
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ],

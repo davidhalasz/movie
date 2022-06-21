@@ -43,4 +43,21 @@ class MovieService {
     }
     return genres;
   }
+
+  Future<List<Movie>?> getUpcomingMovies() async {
+    try {
+      var url = Uri.parse(
+          "${ApiConstants.baseUrl}${ApiConstants.upcoming}${ApiConstants.apiKey}&language=en-US");
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        var decodedResponse = jsonDecode(response.body);
+        var data = decodedResponse['results'] as List;
+        var movies = movieFromJson(data);
+        return movies;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
 }

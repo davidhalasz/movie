@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:movies/bottom_navbar.dart';
 import 'package:movies/screens/nowPlayingPage/now_playing_screen.dart';
 import 'package:movies/screens/upcomingPage/upcomingScreen.dart';
 
@@ -16,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late List<Movie>? _movies = [];
+  late List<Movie>? _upcomingMovies = [];
   late List<Genre> _genres = [];
   final PageController _controller = PageController(initialPage: 0);
   Duration pageChanging = const Duration(
@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _getData() async {
     _movies = (await MovieService().getMovies());
     _genres = (await MovieService().getGenres());
+    _upcomingMovies = (await MovieService().getUpcomingMovies());
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPageChanged: onPageChanged,
         children: [
           NowPlayingScreen(_movies, _genres),
-          const UpcominScreen(),
+          UpcominScreen(_upcomingMovies, _genres),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

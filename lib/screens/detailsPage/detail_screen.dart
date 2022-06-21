@@ -49,31 +49,33 @@ class _DetailScreenState extends State<DetailScreen> {
     var date = dateFormatted.split("-");
 
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          fit: StackFit.loose,
-          children: <Widget>[
-            BackgroundWidget(movie: widget.movie),
-            AnimatedOpacity(
-              curve: Curves.linear,
-              duration: const Duration(seconds: 1),
-              opacity: opacityLevel,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 200),
-                child: Wrap(
-                  children: [
-                    ReleaseDateWidget(date: date),
-                    GenresWidget(genreNames: widget.genreNames),
-                    PopularityWidget(movie: widget.movie),
-                    OverviewWidget(movie: widget.movie),
-                  ],
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            fit: StackFit.loose,
+            children: <Widget>[
+              BackgroundWidget(movie: widget.movie),
+              AnimatedOpacity(
+                curve: Curves.linear,
+                duration: const Duration(seconds: 1),
+                opacity: opacityLevel,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 200),
+                  child: Wrap(
+                    children: [
+                      ReleaseDateWidget(date: date),
+                      GenresWidget(genreNames: widget.genreNames),
+                      PopularityWidget(movie: widget.movie),
+                      OverviewWidget(movie: widget.movie),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            CustomAppbarWidget(movie: widget.movie),
-          ],
+              CustomAppbarWidget(movie: widget.movie),
+            ],
+          ),
         ),
       ),
     );
