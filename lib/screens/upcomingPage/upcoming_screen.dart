@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../data/db/app_db.dart';
+import '../../models/country.dart';
 import '../../models/genre.dart';
 import '../../models/movie.dart';
 import '../mainPage/widgets/home_appbar_widget.dart';
@@ -8,7 +10,11 @@ import '../mainPage/widgets/movie_card_widget.dart';
 class UpcominScreen extends StatefulWidget {
   final List<Movie>? movies;
   final List<Genre> genres;
-  const UpcominScreen(this.movies, this.genres, {Key? key}) : super(key: key);
+  final List<Code> countryCodes;
+  final AppDb db;
+  const UpcominScreen(this.movies, this.genres, this.countryCodes, this.db,
+      {Key? key})
+      : super(key: key);
 
   @override
   State<UpcominScreen> createState() => _UpcominScreenState();
@@ -61,7 +67,8 @@ class _UpcominScreenState extends State<UpcominScreen> {
                     },
                   ),
                 ),
-                const HomeAppbarWidget("Upcoming Movies"),
+                HomeAppbarWidget(
+                    "Upcoming Movies", widget.countryCodes, widget.db),
               ],
             ),
     );

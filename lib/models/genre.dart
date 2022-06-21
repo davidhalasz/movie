@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-//List<Genre> genreFromJson(String str) =>
-//    List<Genre>.from(json.decode(str).map((x) => Genre.fromJson(x)));
-
 List<Genre> genreFromJson(List str) {
   List<Genre> genres = str.map((i) => Genre.fromJson(i)).toList();
   return genres;

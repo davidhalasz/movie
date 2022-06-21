@@ -46,7 +46,7 @@ class MovieCardWidget extends StatelessWidget {
                     image: movie.posterPath != null
                         ? NetworkImage(
                             'https://image.tmdb.org/t/p/w500/${movie.posterPath}')
-                        : const AssetImage('images/no_image_found.jpg')
+                        : const AssetImage('assets/images/no_image_found.jpg')
                             as ImageProvider,
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,

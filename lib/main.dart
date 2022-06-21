@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:movies/data/db/app_db.dart';
 import 'package:movies/screens/mainPage/home_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    Provider(
+      create: (context) => AppDb(),
+      child: const MyApp(),
+      dispose: (context, AppDb db) => db.close(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

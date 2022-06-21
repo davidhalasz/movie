@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../data/db/app_db.dart';
+import '../../models/country.dart';
 import '../../models/genre.dart';
 import '../../models/movie.dart';
 import '../mainPage/widgets/home_appbar_widget.dart';
@@ -8,8 +10,10 @@ import '../mainPage/widgets/movie_card_widget.dart';
 class NowPlayingScreen extends StatefulWidget {
   final List<Movie>? movies;
   final List<Genre> genres;
-
-  const NowPlayingScreen(this.movies, this.genres, {Key? key})
+  final List<Code> countryCodes;
+  final AppDb db;
+  const NowPlayingScreen(this.movies, this.genres, this.countryCodes, this.db,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -63,7 +67,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                     },
                   ),
                 ),
-                const HomeAppbarWidget("In Theaters"),
+                HomeAppbarWidget("In Theaters", widget.countryCodes, widget.db),
               ],
             ),
     );
