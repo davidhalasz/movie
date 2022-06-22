@@ -10,7 +10,8 @@ import '../models/country.dart';
 import '../models/genre.dart';
 
 class MovieService {
-  Future<List<Movie>?> getMovies(String region) async {
+  Future<List<Movie>> getMovies(String? region) async {
+    List<Movie> movies = [];
     try {
       var url = Uri.parse(
           "${ApiConstants.baseUrl}${ApiConstants.nowPlaying}${ApiConstants.apiKey}&language=en-US&page=1&region=$region");
@@ -18,13 +19,13 @@ class MovieService {
       if (response.statusCode == 200) {
         var decodedResponse = jsonDecode(response.body);
         var data = decodedResponse['results'] as List;
-        var movies = movieFromJson(data);
+        movies = movieFromJson(data);
         return movies;
       }
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return movies;
   }
 
   Future<List<Genre>> getGenres() async {
@@ -45,7 +46,8 @@ class MovieService {
     return genres;
   }
 
-  Future<List<Movie>?> getUpcomingMovies(String region) async {
+  Future<List<Movie>> getUpcomingMovies(String region) async {
+    List<Movie> movies = [];
     try {
       var url = Uri.parse(
           "${ApiConstants.baseUrl}${ApiConstants.upcoming}${ApiConstants.apiKey}&language=en-US&region=$region");
@@ -53,13 +55,13 @@ class MovieService {
       if (response.statusCode == 200) {
         var decodedResponse = jsonDecode(response.body);
         var data = decodedResponse['results'] as List;
-        var movies = movieFromJson(data);
+        movies = movieFromJson(data);
         return movies;
       }
     } catch (e) {
       log(e.toString());
     }
-    return null;
+    return movies;
   }
 
   Future<List<Code>> getCountryCodes() async {

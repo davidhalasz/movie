@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../data/db/app_db.dart';
 import '../../models/country.dart';
 import '../../models/genre.dart';
 import '../../models/movie.dart';
+import '../../providers/movie_provider.dart';
 import '../mainPage/widgets/home_appbar_widget.dart';
 import '../mainPage/widgets/movie_card_widget.dart';
 
 class NowPlayingScreen extends StatefulWidget {
-  final List<Movie>? movies;
   final List<Genre> genres;
   final List<Code> countryCodes;
-  final AppDb db;
-  const NowPlayingScreen(this.movies, this.genres, this.countryCodes, this.db,
-      {Key? key})
+  const NowPlayingScreen(this.genres, this.countryCodes, {Key? key})
       : super(key: key);
 
   @override
@@ -36,6 +34,11 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     return names;
   }
 
+  Future<List<Movie>> _getNowPlayingMovies() async {
+    var movies = Provider.of<MovieProvider>(context).nowPlayingMovies;
+    return movies;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width * 0.90;
@@ -43,21 +46,27 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: widget.movies == null || widget.movies!.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Stack(
+      child: FutureBuilder<List<Movie>>(
+          future: _getNowPlayingMovies(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            List<Movie> nowPlayingMovies = snapshot.data!;
+            return Stack(
               fit: StackFit.passthrough,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 100),
                   child: ListView.builder(
-                    itemCount: widget.movies!.length,
+                    itemCount: nowPlayingMovies.length,
                     itemBuilder: (context, index) {
                       var genreNames =
-                          getGenreNames(widget.movies![index].genreIds);
-                      var movie = widget.movies![index];
+                          getGenreNames(nowPlayingMovies[index].genreIds);
+                      var movie = nowPlayingMovies[index];
 
                       return MovieCardWidget(
                         movie: movie,
@@ -67,9 +76,10 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                     },
                   ),
                 ),
-                HomeAppbarWidget("In Theaters", widget.countryCodes, widget.db),
+                HomeAppbarWidget("In Theaters", widget.countryCodes)
               ],
-            ),
+            );
+          }),
     );
   }
 }

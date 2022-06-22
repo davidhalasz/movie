@@ -3,17 +3,17 @@ import 'package:movies/constants/style_constants.dart';
 import 'package:movies/data/db/app_db.dart';
 import 'package:movies/models/country.dart';
 import 'package:drift/drift.dart' as drift;
+import 'package:movies/providers/movie_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../my_wave_clipper.dart';
 
 class HomeAppbarWidget extends StatefulWidget {
   final String title;
   final List<Code> countryCodes;
-  final AppDb db;
   const HomeAppbarWidget(
     this.title,
-    this.countryCodes,
-    this.db, {
+    this.countryCodes, {
     Key? key,
   }) : super(key: key);
 
@@ -31,7 +31,7 @@ class _HomeAppbarWidgetState extends State<HomeAppbarWidget> {
   }
 
   Future<void> changeCurrentCode() async {
-    await widget.db.getCountry().then((value) {
+    await Provider.of<AppDb>(context, listen: false).getCountry().then((value) {
       setState(() {
         currentCountryCode = value.code;
       });
@@ -46,11 +46,13 @@ class _HomeAppbarWidgetState extends State<HomeAppbarWidget> {
       code: drift.Value(country.code),
       name: drift.Value(country.name),
     );
-    if (await widget.db.isEmptyTable()) {
-      await widget.db.insertCountry(entity);
+    if (await Provider.of<AppDb>(context, listen: false).isEmptyTable()) {
+      await Provider.of<AppDb>(context, listen: false).insertCountry(entity);
     } else {
-      await widget.db.updateCountry(entity);
+      await Provider.of<AppDb>(context, listen: false).updateCountry(entity);
     }
+    Provider.of<MovieProvider>(context, listen: false)
+        .fecthAndSetUpcomingMovies(code);
     setState(() {
       currentCountryCode = code;
     });
@@ -121,7 +123,7 @@ class _HomeAppbarWidgetState extends State<HomeAppbarWidget> {
                       );
                     }),
                 child: Padding(
-                  padding: EdgeInsets.only(right: 30),
+                  padding: const EdgeInsets.only(right: 30),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Container(

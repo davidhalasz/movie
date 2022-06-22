@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movies/providers/movie_provider.dart';
+import 'package:provider/provider.dart';
 
-import '../../data/db/app_db.dart';
 import '../../models/country.dart';
 import '../../models/genre.dart';
 import '../../models/movie.dart';
@@ -8,12 +9,10 @@ import '../mainPage/widgets/home_appbar_widget.dart';
 import '../mainPage/widgets/movie_card_widget.dart';
 
 class UpcominScreen extends StatefulWidget {
-  final List<Movie>? movies;
   final List<Genre> genres;
   final List<Code> countryCodes;
-  final AppDb db;
-  const UpcominScreen(this.movies, this.genres, this.countryCodes, this.db,
-      {Key? key})
+
+  const UpcominScreen(this.genres, this.countryCodes, {Key? key})
       : super(key: key);
 
   @override
@@ -36,28 +35,46 @@ class _UpcominScreenState extends State<UpcominScreen> {
     return names;
   }
 
+  Future<List<Movie>> _getUpcomingMovies() async {
+    var movies = Provider.of<MovieProvider>(context).upcomingMovies;
+    return movies;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width * 0.90;
+    var movies = Provider.of<MovieProvider>(context).upcomingMovies;
 
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: widget.movies == null || widget.movies!.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Stack(
+      child: FutureBuilder<List<Movie>>(
+          future: _getUpcomingMovies(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            List<Movie> upcomingMovies = snapshot.data!;
+
+            return Stack(
               fit: StackFit.passthrough,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 100),
                   child: ListView.builder(
-                    itemCount: widget.movies!.length,
+                    itemCount: upcomingMovies.length,
                     itemBuilder: (context, index) {
                       var genreNames =
-                          getGenreNames(widget.movies![index].genreIds);
-                      var movie = widget.movies![index];
+                          getGenreNames(upcomingMovies[index].genreIds);
+                      var movie = upcomingMovies[index];
 
                       return MovieCardWidget(
                         movie: movie,
@@ -67,10 +84,10 @@ class _UpcominScreenState extends State<UpcominScreen> {
                     },
                   ),
                 ),
-                HomeAppbarWidget(
-                    "Upcoming Movies", widget.countryCodes, widget.db),
+                HomeAppbarWidget("Upcoming Movies", widget.countryCodes),
               ],
-            ),
+            );
+          }),
     );
   }
 }
