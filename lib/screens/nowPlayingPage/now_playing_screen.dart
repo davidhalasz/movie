@@ -5,6 +5,7 @@ import '../../models/country.dart';
 import '../../models/genre.dart';
 import '../../models/movie.dart';
 import '../../providers/movie_provider.dart';
+import '../../services/movie_service.dart';
 import '../mainPage/widgets/home_appbar_widget.dart';
 import '../mainPage/widgets/movie_card_widget.dart';
 
@@ -19,21 +20,6 @@ class NowPlayingScreen extends StatefulWidget {
 }
 
 class _NowPlayingScreenState extends State<NowPlayingScreen> {
-  List<String> getGenreNames(List<int> genreIds) {
-    List<String> names = [];
-    if (widget.genres.isNotEmpty) {
-      for (var id in genreIds) {
-        for (int t = 0; t < widget.genres.length; t++) {
-          if (id == widget.genres[t].id) {
-            names.add(widget.genres[t].name);
-            break;
-          }
-        }
-      }
-    }
-    return names;
-  }
-
   Future<List<Movie>> _getNowPlayingMovies() async {
     var movies = Provider.of<MovieProvider>(context).nowPlayingMovies;
     return movies;
@@ -64,8 +50,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                   child: ListView.builder(
                     itemCount: nowPlayingMovies.length,
                     itemBuilder: (context, index) {
-                      var genreNames =
-                          getGenreNames(nowPlayingMovies[index].genreIds);
+                      var genreNames = MovieService().getGenreNames(
+                          nowPlayingMovies[index].genreIds, widget.genres);
                       var movie = nowPlayingMovies[index];
 
                       return MovieCardWidget(

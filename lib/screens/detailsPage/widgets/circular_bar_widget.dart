@@ -16,7 +16,7 @@ class CircularBarWidget extends StatelessWidget {
         tween: Tween(begin: 0.0, end: movie.voteAverage / 10),
         duration: const Duration(seconds: 2),
         builder: (context, value, child) {
-          return Container(
+          return SizedBox(
             width: 90,
             height: 90,
             child: Stack(

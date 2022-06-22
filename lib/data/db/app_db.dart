@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:drift/drift.dart';
@@ -24,6 +23,24 @@ class AppDb extends _$AppDb {
 
   @override
   int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onCreate: (Migrator m) {
+          return m.createAll();
+        },
+        beforeOpen: (details) async {
+          if (details.wasCreated) {
+            // create default categories and entries
+            await into(country).insert(
+              const CountryCompanion(
+                code: Value('HU'),
+                name: Value("Hungary"),
+              ),
+            );
+          }
+        },
+      );
 
   Future<CountryData> getCountry() {
     var singleCountry = select(country)..where((t) => t.id.equals(1));

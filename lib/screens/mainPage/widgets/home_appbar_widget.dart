@@ -42,7 +42,7 @@ class _HomeAppbarWidgetState extends State<HomeAppbarWidget> {
     final country =
         widget.countryCodes.firstWhere((element) => element.code == code);
     final entity = CountryCompanion(
-      id: drift.Value(1),
+      id: const drift.Value(1),
       code: drift.Value(country.code),
       name: drift.Value(country.name),
     );
@@ -51,8 +51,14 @@ class _HomeAppbarWidgetState extends State<HomeAppbarWidget> {
     } else {
       await Provider.of<AppDb>(context, listen: false).updateCountry(entity);
     }
+    refreshMoviesList(code);
+  }
+
+  void refreshMoviesList(String code) {
     Provider.of<MovieProvider>(context, listen: false)
         .fecthAndSetUpcomingMovies(code);
+    Provider.of<MovieProvider>(context, listen: false)
+        .fecthAndSetNowPlayingMovies(code);
     setState(() {
       currentCountryCode = code;
     });
@@ -133,7 +139,7 @@ class _HomeAppbarWidgetState extends State<HomeAppbarWidget> {
                         image: DecorationImage(
                           fit: BoxFit.fill,
                           image: NetworkImage(
-                              "http://www.geognos.com/api/en/countries/flag/${currentCountryCode}.png"),
+                              "http://www.geognos.com/api/en/countries/flag/$currentCountryCode.png"),
                         ),
                         shape: BoxShape.circle,
                         border: Border.all(

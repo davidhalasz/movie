@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/country.dart';
 import '../../models/genre.dart';
 import '../../models/movie.dart';
+import '../../services/movie_service.dart';
 import '../mainPage/widgets/home_appbar_widget.dart';
 import '../mainPage/widgets/movie_card_widget.dart';
 
@@ -20,21 +21,6 @@ class UpcominScreen extends StatefulWidget {
 }
 
 class _UpcominScreenState extends State<UpcominScreen> {
-  List<String> getGenreNames(List<int> genreIds) {
-    List<String> names = [];
-    if (widget.genres.isNotEmpty) {
-      for (var id in genreIds) {
-        for (int t = 0; t < widget.genres.length; t++) {
-          if (id == widget.genres[t].id) {
-            names.add(widget.genres[t].name);
-            break;
-          }
-        }
-      }
-    }
-    return names;
-  }
-
   Future<List<Movie>> _getUpcomingMovies() async {
     var movies = Provider.of<MovieProvider>(context).upcomingMovies;
     return movies;
@@ -48,7 +34,6 @@ class _UpcominScreenState extends State<UpcominScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width * 0.90;
-    var movies = Provider.of<MovieProvider>(context).upcomingMovies;
 
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -72,8 +57,8 @@ class _UpcominScreenState extends State<UpcominScreen> {
                   child: ListView.builder(
                     itemCount: upcomingMovies.length,
                     itemBuilder: (context, index) {
-                      var genreNames =
-                          getGenreNames(upcomingMovies[index].genreIds);
+                      var genreNames = MovieService().getGenreNames(
+                          upcomingMovies[index].genreIds, widget.genres);
                       var movie = upcomingMovies[index];
 
                       return MovieCardWidget(

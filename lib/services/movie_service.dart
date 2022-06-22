@@ -79,4 +79,19 @@ class MovieService {
   Future<String> loadAsset(String filename) async {
     return await rootBundle.loadString(filename);
   }
+
+  List<String> getGenreNames(List<int> genreIds, List<Genre> genres) {
+    List<String> names = [];
+    if (genres.isNotEmpty) {
+      for (var id in genreIds) {
+        for (int t = 0; t < genres.length; t++) {
+          if (id == genres[t].id) {
+            names.add(genres[t].name);
+            break;
+          }
+        }
+      }
+    }
+    return names;
+  }
 }
