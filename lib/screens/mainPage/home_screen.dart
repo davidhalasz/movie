@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies/data/db/app_db.dart';
 import 'package:movies/providers/movie_provider.dart';
+import 'package:movies/screens/favoritesPage/favorites_screen.dart';
 import 'package:movies/screens/nowPlayingPage/now_playing_screen.dart';
 import 'package:movies/screens/upcomingPage/upcoming_screen.dart';
 import 'package:provider/provider.dart';
@@ -29,19 +30,23 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _getData();
-    Provider.of<AppDb>(context, listen: false).getCountry().then((value) {
-      currentCountryCode = value.code;
-      Provider.of<MovieProvider>(context, listen: false)
-          .fecthAndSetNowPlayingMovies(value.code);
-      Provider.of<MovieProvider>(context, listen: false)
-          .fecthAndSetUpcomingMovies(value.code);
-    });
   }
 
   Future<void> _getData() async {
     _genres = await MovieService().getGenres();
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
     _countryCodes = await MovieService().getCountryCodes();
+    await Provider.of<AppDb>(context, listen: false).getCountry().then((value) {
+      currentCountryCode = value.code;
+      Provider.of<MovieProvider>(context, listen: false)
+          .fecthAndSetNowPlayingMovies(value.code);
+      Provider.of<MovieProvider>(context, listen: false)
+          .fecthAndSetUpcomingMovies(value.code);
+      var favoriteMovies =
+          Provider.of<AppDb>(context, listen: false).getFavorites();
+      Provider.of<MovieProvider>(context, listen: false)
+          .fetchAndSetFavoriteMovies(favoriteMovies);
+    });
   }
 
   void navigationTapped(int page) {
@@ -71,12 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: PageView(
         controller: _controller,
-        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         onPageChanged: onPageChanged,
         children: [
           NowPlayingScreen(_genres, _countryCodes),
           UpcominScreen(_genres, _countryCodes),
+          FavoritesScreen(_genres, _countryCodes),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -91,11 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.movie_filter),
-            label: "bus",
+            label: "Upcoming",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: "school",
+            icon: Icon(Icons.favorite),
+            label: "Favorites",
           ),
         ],
         onTap: navigationTapped,

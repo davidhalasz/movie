@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:movies/providers/movie_provider.dart';
+import 'package:movies/screens/detailsPage/widgets/watchlist_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/movie.dart';
 import 'widgets/background_widget.dart';
@@ -47,6 +50,8 @@ class _DetailScreenState extends State<DetailScreen> {
     var dateFormatted = DateFormat("dd-MMMM-yyyy")
         .format(DateTime.parse(widget.movie.releaseDate));
     var date = dateFormatted.split("-");
+    var isFavorite = Provider.of<MovieProvider>(context)
+        .isExistsFavoriteMovie(widget.movie.id);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -62,9 +67,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 duration: const Duration(seconds: 1),
                 opacity: opacityLevel,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 200),
+                  padding: const EdgeInsets.only(top: 150),
                   child: Wrap(
                     children: [
+                      WatchlistWidget(widget.movie, isFavorite),
                       ReleaseDateWidget(date: date),
                       GenresWidget(genreNames: widget.genreNames),
                       PopularityWidget(movie: widget.movie),
