@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/services.dart';
-import 'package:movies/constants/api_constant.dart';
+import 'package:movies/constants/api_constants.dart';
 import 'package:movies/models/movie.dart';
 import 'package:http/http.dart' as http;
 
