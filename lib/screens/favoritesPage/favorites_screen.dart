@@ -22,7 +22,7 @@ class _FavoritesScreen extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height - kToolbarHeight) / 3;
+    final double itemHeight = size.height / 3;
     final double itemWidth = size.width / 2;
     var favMovies = Provider.of<MovieProvider>(context).favoriteMovies;
     return Stack(
@@ -54,19 +54,23 @@ class _FavoritesScreen extends State<FavoritesScreen> {
                           ),
                         );
                       },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: favMovies[i].posterPath != null
-                                ? NetworkImage(
-                                    'https://image.tmdb.org/t/p/w500/${favMovies[i].posterPath}')
-                                : const AssetImage(
-                                        'assets/images/no_image_found.jpg')
-                                    as ImageProvider,
-                            fit: BoxFit.fill,
-                            alignment: Alignment.topCenter,
+                      child: Hero(
+                        tag: '${favMovies[i].id}',
+                        transitionOnUserGestures: true,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: favMovies[i].posterPath != null
+                                  ? NetworkImage(
+                                      'https://image.tmdb.org/t/p/w500/${favMovies[i].posterPath}')
+                                  : const AssetImage(
+                                          'assets/images/no_image_found.jpg')
+                                      as ImageProvider,
+                              fit: BoxFit.fill,
+                              alignment: Alignment.topCenter,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
                         ),
                       ),
                     );

@@ -28,15 +28,18 @@ class CustomAppbarWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: const Icon(
-                  Icons.arrow_back_ios_new,
-                  color: Colors.white,
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                  child: Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 40,
+                  width: MediaQuery.of(context).size.width - 48,
                   child: FittedBox(
                     alignment: Alignment.center,
                     fit: BoxFit.scaleDown,

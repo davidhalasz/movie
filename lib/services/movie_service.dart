@@ -73,6 +73,7 @@ class MovieService {
     } catch (e) {
       log(e.toString());
     }
+    codes.sort(((a, b) => a.name.compareTo(b.name)));
     return codes;
   }
 

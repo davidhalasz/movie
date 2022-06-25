@@ -3,14 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:movies/data/db/app_db.dart';
 import 'package:movies/services/movie_service.dart';
-import 'package:provider/provider.dart';
 
 import '../models/movie.dart';
 
 class MovieProvider with ChangeNotifier {
   List<Movie> _upcomingMovies = [];
   List<Movie> _nowPlayingMovies = [];
-  List<Movie> _favoriteMovies = [];
+  final List<Movie> _favoriteMovies = [];
 
   List<Movie> get upcomingMovies {
     return [..._upcomingMovies];
